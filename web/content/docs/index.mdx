@@ -1,13 +1,29 @@
 ---
-title: Hello World
-description: Your first document
+title: Introduction
+description: Fact-first memory and RAG for agents.
 ---
 
-Welcome to the docs! You can start writing documents in `/content/docs`.
+import { Card, Cards } from 'fumadocs-ui/components/card';
 
-## What is Next?
+Memory is a TypeScript/Bun service that ingests, stores, and retrieves
+"memories" (text snippets and extracted facts) with semantic search and
+retrieval-augmented generation (RAG). It uses Express for the API,
+Prisma/PostgreSQL for structured storage, Qdrant for vector search, and
+OpenRouter for embeddings, fact extraction, reranking, and answer generation.
+
+## Features
+
+- REST API for creating, updating, deleting, and querying memories
+- Fact-first storage: extracts atomic facts before embedding for richer recall
+- Semantic search via Qdrant vector DB with scoped filters (`userId`, `agentId`, `runId`)
+- RAG Q&A: retrieves memories, optionally reranks, then generates answers with LLMs
+- **Procedural Memory**: tracks agent execution history with step-by-step action logging and LLM-generated summaries
+- Deduplication using normalized content hashing
+- Validation with Zod schemas on all inputs
+- Configurable models for embedding, rerank, fact extraction, and answer generation
 
 <Cards>
-  <Card title="Learn more about Next.js" href="https://nextjs.org/docs" />
-  <Card title="Learn more about Fumadocs" href="https://fumadocs.dev" />
+  <Card title="Memory Types" href="/docs/memory-types" />
+  <Card title="API Reference" href="/docs/api-reference" />
+  <Card title="Setup" href="/docs/setup" />
 </Cards>

@@ -1,0 +1,12 @@
+---
+title: Data Model
+description: The Prisma Memory model.
+---
+
+`Memory` fields include: `userId`, `agentId`, `runId`, `role`, `source`,
+`sourceId`, `timestamp`, `contentUrl`, `title`, `origin`, `tags[]`,
+`category[]`, `attribute` (JSON), `summary`, `type`, `importance`,
+`confidence`, `embeddingRef`, `contentHash` (unique), `createdAt`,
+`updatedAt`.
+
+Indexed on `contentHash`, `userId + contentHash`, and `userId + agentId + runId`.

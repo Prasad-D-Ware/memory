@@ -1,0 +1,19 @@
+---
+title: API Reference
+description: HTTP endpoints under /api.
+---
+
+Base path: `/api`. Request/response schemas are enforced via Zod in
+`src/types/memory.types.ts`.
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/memory` | Create a memory (fact extraction + embeddings). |
+| `PUT` | `/memory` | Update memory metadata/content (does not currently re-embed). |
+| `DELETE` | `/memory` | Delete a memory (controller does not delete vector; use Embedding Service if needed). |
+| `GET` | `/memory` | Get memory by id. |
+| `GET` | `/memory/user` | List memories for a user. |
+| `POST` | `/memories` | Batch ingest messages; defaults to fact extraction unless `infer=false`. |
+| `POST` | `/memories/search` | Semantic search with filters (`userId`/`agentId`/`runId`, limit, scoreThreshold). |
+| `POST` | `/memories/answer` | Ask with optional query override; returns answer + source memories. |
+| `POST` | `/memories/ask` | RAG endpoint with optional procedural memory tracking. |

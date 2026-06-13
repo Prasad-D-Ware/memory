@@ -1,0 +1,58 @@
+---
+title: Procedural Memory
+description: Track agent execution history within a run.
+---
+
+Procedural memory enables tracking of agent execution history within a
+task/run. It stores each interaction as a step with context, allowing agents
+to resume interrupted tasks or review past actions.
+
+## Usage
+
+Include the `procedural` object in your `/memories/ask` request:
+
+```json
+{
+  "query": "What authentication method does this project use?",
+  "userId": 1,
+  "agentId": "code-review-agent",
+  "runId": "task-abc123",
+  "procedural": {
+    "store": true,
+    "summarize": false,
+    "includeHistory": false,
+    "taskObjective": "Security audit of the codebase",
+    "stepNumber": 1,
+    "action": "Checking authentication implementation",
+    "context": "Starting security review"
+  }
+}
+```
+
+## Procedural Options
+
+| Option | Type | Description |
+|--------|------|-------------|
+| `store` | boolean | Store this Q&A interaction as a procedural step |
+| `summarize` | boolean | Generate and return a summary of all steps using LLM |
+| `includeHistory` | boolean | Return all previous steps for this run |
+| `taskObjective` | string | Overall goal of the task (stored with first step) |
+| `stepNumber` | number | Step sequence number (auto-generated if not provided) |
+| `action` | string | Description of what action triggered this query |
+| `context` | string | Current execution context |
+
+## Response
+
+When procedural options are enabled, the response includes:
+
+```json
+{
+  "answer": "The project uses JWT tokens with...",
+  "memories": [],
+  "procedural": {
+    "stored": { "memoryId": 123, "isDuplicate": false, "stepNumber": 1 },
+    "summary": "## Summary of agent's execution history...",
+    "history": []
+  }
+}
+```

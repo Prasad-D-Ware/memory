@@ -2,6 +2,8 @@
 
 Memory is a TypeScript/Bun service that ingests, stores, and retrieves "memories" (text snippets and extracted facts) with semantic search and retrieval-augmented generation (RAG). It uses Express for the API, Prisma/PostgreSQL for structured storage, Qdrant for vector search, and OpenRouter for embeddings, fact extraction, reranking, and answer generation.
 
+> 📖 **Docs site:** a Fumadocs-powered documentation site + landing page lives in [`web/`](web/). Run `cd web && bun run dev` and open http://localhost:3000.
+
 ## Features
 - REST API for creating, updating, deleting, and querying memories
 - Fact-first storage: extracts atomic facts before embedding for richer recall

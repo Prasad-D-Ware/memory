@@ -1,0 +1,12 @@
+{
+  "title": "Docs",
+  "pages": [
+    "index",
+    "memory-types",
+    "architecture",
+    "data-model",
+    "api-reference",
+    "procedural-memory",
+    "setup"
+  ]
+}

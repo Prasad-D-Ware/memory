@@ -1,0 +1,29 @@
+---
+title: Architecture
+description: Layers, services, data stores, and key flows.
+---
+
+<img
+  src="https://github.com/user-attachments/assets/647d68bb-cea1-45c6-b7ac-b817ebdac7e0"
+  alt="Memory Architecture"
+  style={{ borderRadius: '0.5rem', width: '100%' }}
+/>
+
+- **API Layer**: Express routes under `/api` with controllers handling validation and responses.
+- **Services**:
+  - Memory Service: core orchestration (create, batch ingest, search, ask/answer, dedupe, procedural tracking).
+  - Fact Extraction Service: LLM chat completion to produce concise facts.
+  - Embedding Service: generates embeddings (OpenRouter), stores/searches vectors in Qdrant.
+  - Rerank & Answer: optional reranking plus answer generation via LLM chat.
+- **Data Stores**:
+  - PostgreSQL (Prisma): memory metadata (source, tags, categories, attributes, summary, contentHash).
+  - Qdrant: embeddings with payload metadata for filtered search.
+- **Utilities**: hashing for deduplication, prompt templates for RAG flows.
+
+## Key Flows
+
+- **Create**: controller validates → Memory Service dedupes by hash → save row → extract facts → embed each fact → store vectors in Qdrant → update memory summary/embeddingRef → respond.
+- **Batch**: iterate messages; `infer=true` follows Create flow per message; `infer=false` stores full-content embedding once.
+- **Search**: generate query embedding → Qdrant search with filters → return scored payloads.
+- **Ask/Answer (RAG)**: search → optional rerank via LLM scores → format memories → answer via LLM → optionally store as procedural step.
+- **Procedural Summary**: fetch all steps for `runId` → format as execution history → LLM generates structured summary.

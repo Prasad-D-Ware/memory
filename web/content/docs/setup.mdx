@@ -1,0 +1,45 @@
+---
+title: Setup & Running
+description: Install, configure, and run the service.
+---
+
+## Setup
+
+1. Install Bun: `curl -fsSL https://bun.sh/install | bash`
+2. Install deps: `bun install`
+3. Configure environment variables (e.g., `.env`).
+4. Prepare Postgres database and run Prisma generate (ensure `prisma/generator` output matches `src/generated/prisma`).
+5. Ensure Qdrant is reachable and collection matches dimension.
+
+## Running
+
+- Dev/serve: `bun run index.ts`
+- The server listens on `PORT` and exposes `/api/...` routes.
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| `PORT` | API port (default 8000) |
+| `OPENROUTER_API_KEY` | OpenRouter API key |
+| `EMBEDDING_MODEL` | Embedding model name (e.g., `openai/text-embedding-3-small`) |
+| `EMBEDDING_DIMENSION` | Embedding vector dimension (must match Qdrant collection) |
+| `QDRANT_URL` | Qdrant endpoint |
+| `QDRANT_API_KEY` | Qdrant API key (if required) |
+| `QDRANT_COLLECTION_NAME` / `COLLECTION_NAME` | Target collection |
+| `ANSWER_MODEL` | Model for answer generation (default `gpt-4o-mini`) |
+| `RERANK_MODEL` | Model for reranking (default `gpt-4o-mini`) |
+| `RERANK_ENABLED` | `"true"` to enable rerank by default |
+| `RERANK_TOP_K` | Max docs after rerank |
+| `FACT_MODEL` | Model for fact extraction (default `gpt-4o-mini`) |
+| `PROCEDURAL_MODEL` | Model for procedural summary generation (default `gpt-4o-mini`) |
+| `NODE_ENV` | Controls Prisma logging |
+
+## Operational Notes
+
+- Deduplication is per `userId` (and agent/run attributes) using `contentHash`.
+- Fact extraction is mandatory in the create flow; if no facts are extracted, the memory is stored without embeddings.
+- Embedding updates on memory updates are not automatic in current controllers.
+- Qdrant collection is auto-created on first use with cosine distance and configured dimension.
+- Rerank is optional and can be toggled per request or via env defaults.
+- Procedural memories are stored with `type: "procedural"` and can be filtered/searched like regular memories.

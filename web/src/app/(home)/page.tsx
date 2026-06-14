@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
+import { Glyph, glyphOrder } from '@/components/glyphs';
 
 const TILE_COUNT = 11;
 const MAX_ANGLE = 120; // degrees each side of the apex (opening at the bottom)
@@ -31,9 +32,9 @@ const tiles: Tile[] = Array.from({ length: TILE_COUNT }, (_, idx) => {
 
 function tileBackground(hue: number): string {
   return [
-    `radial-gradient(at 30% 22%, hsl(${hue} 92% 66%), transparent 60%)`,
-    `radial-gradient(at 78% 86%, hsl(${(hue + 38) % 360} 85% 56%), transparent 55%)`,
-    `linear-gradient(150deg, hsl(${(hue + 18) % 360} 72% 46%), hsl(${(hue + 330) % 360} 82% 34%))`,
+    `radial-gradient(at 28% 20%, hsl(${hue} 88% 62%), transparent 60%)`,
+    `radial-gradient(at 80% 88%, hsl(${(hue + 38) % 360} 82% 50%), transparent 55%)`,
+    `linear-gradient(150deg, hsl(${(hue + 18) % 360} 68% 42%), hsl(${(hue + 330) % 360} 78% 30%))`,
   ].join(', ');
 }
 
@@ -59,7 +60,7 @@ const features = [
 export default function HomePage() {
   return (
     <main className="flex flex-1 flex-col">
-      {/* Hero: arc of tiles wrapping the headline */}
+      {/* Hero: arc of memory-glyph tiles wrapping the headline */}
       <section className="relative overflow-hidden px-6 pb-16 pt-8">
         <div
           aria-hidden
@@ -72,18 +73,32 @@ export default function HomePage() {
 
         {/* arc stage */}
         <div className="relative mx-auto h-[480px] w-full max-w-5xl [--cy:248px] [--r:170px] sm:h-[600px] sm:[--cy:300px] sm:[--r:240px] lg:h-[660px] lg:[--cy:330px] lg:[--r:312px]">
-          {/* tiles */}
           <ul aria-hidden className="absolute inset-0">
             {tiles.map((tile) => (
               <li key={tile.idx} className="absolute list-none" style={slotStyle(tile)}>
                 <div className="hero-rise" style={{ animationDelay: `${(tile.mag * 0.08).toFixed(2)}s` }}>
                   <div
                     className={[
-                      'h-11 w-11 overflow-hidden rounded-xl shadow-xl shadow-black/40 sm:h-16 sm:w-16 sm:rounded-2xl lg:h-20 lg:w-20 lg:rounded-[1.25rem]',
-                      tile.isApex ? 'ring-2 ring-white/40' : 'ring-1 ring-white/10',
+                      'relative h-11 w-11 overflow-hidden rounded-xl shadow-xl shadow-black/40 sm:h-16 sm:w-16 sm:rounded-2xl lg:h-20 lg:w-20 lg:rounded-[1.25rem]',
+                      tile.isApex ? 'ring-2 ring-white/45' : 'ring-1 ring-white/10',
                     ].join(' ')}
                     style={{ background: tileBackground(tile.hue) }}
-                  />
+                  >
+                    <div className="absolute inset-0 bg-black/20" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg
+                        viewBox="0 0 48 48"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={1.6}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="h-[58%] w-[58%] text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
+                      >
+                        <Glyph name={glyphOrder[tile.idx]} />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </li>
             ))}
